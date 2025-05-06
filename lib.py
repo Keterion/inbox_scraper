@@ -31,7 +31,6 @@ def gen_session() -> requests.Session:
 def gen_state() -> dict:
     return {
         "get_ammount": 10,
-        "last_stop": 0,
         "total": 0,
         "save_dir": "mails",
         "username": read_file_line("username.txt") + "@fvbschulen.eu",

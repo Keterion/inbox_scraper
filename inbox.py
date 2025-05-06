@@ -60,8 +60,7 @@ if __name__ == "__main__":
     state: dict = lib.gen_state()
 
     emails_per_get = state["get_ammount"]
-    start = state["last_stop"]
-
+    start = 0
     dump = get_dump(start, emails_per_get, state["username"], s)
 
     while state["total"] < dump["total"]:
@@ -132,6 +131,7 @@ if __name__ == "__main__":
 
             start += emails_per_get
             dump = get_dump(start, emails_per_get, state["username"], s)
+            lib.write_file("downloaded.json", json.dumps(downloaded))
         except KeyboardInterrupt:
             print("Exiting...")
             lib.write_file("downloaded.json", json.dumps(downloaded))
