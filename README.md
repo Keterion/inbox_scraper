@@ -15,7 +15,7 @@ The files should be in the same folder as this README file.
 ## Execution
 Run `python inbox.py`. The command needs to be executed from the folder this README is in.
 
-Running it with `-v` (`python inbox.py -v`) will enable verbose more so a lot more yapping you probably don't want
+Running it with `-v` (`python inbox.py -v`) will enable verbose so a lot more yapping, up to you if you want that.
 
 ## Configuration
 Little to nothing here, you can check out `lib.py` and see if you want to change any of the default state things.
