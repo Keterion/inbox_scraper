@@ -1,9 +1,9 @@
 # Iserv Scraper
 ## Setup
 ### Dependencies:
-python >= 3.12
+[python](https://www.python.org/downloads/) >= 3.12
 
-requests = *
+[requests](https://pypi.org/project/requests/) = *
 
 ### Files
 username.txt - iserv username (i.e. "john.doe")
