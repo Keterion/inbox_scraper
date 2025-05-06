@@ -2,10 +2,12 @@
 ## Setup
 ### Dependencies:
 python >= 3.12
+
 requests = *
 
 ### Files
 username.txt - iserv username (i.e. "john.doe")
+
 password.txt - iserv password (i.e. "passw0rd")
 
 The files should be in the same folder as this README file.
