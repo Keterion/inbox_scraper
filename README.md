@@ -15,14 +15,15 @@ The files should be in the same folder as this README file.
 ## Execution
 Run `python inbox.py`. The command needs to be executed from the folder this README is in.
 
-Running it with `-v` (`python inbox.py -v`) will enable verbose so a lot more yapping, up to you if you want that.
+### Flags
 
-Adding `-i` as flag ignores all previously downloaded files and also doesn't add to the `downloads.json`. Alternatively you can delete the downloads.json file, it won't break anything
+| `-v` | **Verbose**, more yapping                      |
+| `-s` | **Silent**, no output                          |
+| `-i` | **Ignore** list of already downloaded emails   |
 
-
-
+### Mailbox ID
 (Also, you might have to edit `inbox.py`. On line 35 or so, in the get_dump function, the url contains the string "SU5CT1g". It might be that that is not the mailbox ID you have.
-### Getting your mailbox ID
+#### Getting your mailbox ID
 There are two ways I know of.
 
 The first one is to hover over any attachment and look at the link. After your email and before a bunch of random characters there should be something resembling the SU5CT1g I found. Just take that and replace the text in `inbox.py`.

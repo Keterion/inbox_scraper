@@ -48,7 +48,8 @@ if __name__ == "__main__":
     # a = [1, 2]
 
     # verbose logging when running with -v
-    vprint = print if len(sys.argv) >= 2 and "-v" in sys.argv else lambda *a: None
+    pprint = print if "-s" not in sys.argv else lambda *b: None
+    vprint = pprint if len(sys.argv) >= 2 and "-v" in sys.argv else lambda *a: None
     ignore_previous_downloads = "-i" in sys.argv
 
     if path.exists("downloaded.json"):
@@ -69,7 +70,7 @@ if __name__ == "__main__":
             emails = dump["items"]
             for mail in emails:
                 if mail["id"]["uid"] in downloaded and not ignore_previous_downloads:
-                    print(mail["subject"] + " already downloaded, skipping...")
+                    pprint("Skipping " + mail["subject"])
                     state["total"] += 1
                     continue  # skips any email that has been downloaded
                 try:
@@ -82,7 +83,7 @@ if __name__ == "__main__":
                         .replace("\n", "")
                         .replace("\r", "")
                     )
-                    print("\nDownloading: " + mail["subject"])
+                    pprint("\nDownloading: " + mail["subject"])
                     contents = get_email(
                         f'https://fvbschulen.eu/iserv/mail/api/v2/account/{state["username"]}/mailbox/SU5CT1g/message/{mail["id"]["uid"]}',
                         s,
@@ -93,7 +94,7 @@ if __name__ == "__main__":
                         contents = json.loads(contents)
                         attachments = contents["attachments"]
                         if len(attachments) > 0:
-                            print(
+                            pprint(
                                 "Found "
                                 + str(len(attachments))
                                 + " attachments, downloading..."
@@ -121,7 +122,7 @@ if __name__ == "__main__":
                                 ) as f:
                                     for chunk in r.iter_content(chunk_size=4096):
                                         f.write(chunk)
-                            print("   Downloaded " + attachment_name)
+                            pprint("   Downloaded " + attachment_name)
                         try:
                             text = contents["content"]["plain"][0]["content"]
                             lib.write_file(
@@ -135,17 +136,17 @@ if __name__ == "__main__":
                         state["total"] += 1
                         if not ignore_previous_downloads:
                             downloaded.append(mail["id"]["uid"])
-                        print(f"Saved {mail['subject']}")
+                        pprint(f"Saved {mail['subject']}")
                     else:
-                        print(f"Error getting {mail['subject']}")
+                        pprint(f"Error getting {mail['subject']}")
                 except Exception as e:
-                    print(e)
+                    pprint(e)
 
             start += emails_per_get
             dump = get_dump(start, emails_per_get, state["username"], s)
             lib.write_file("downloaded.json", json.dumps(downloaded))
         except KeyboardInterrupt:
-            print("Exiting...")
+            pprint("Exiting...")
             lib.write_file("downloaded.json", json.dumps(downloaded))
             break
 
