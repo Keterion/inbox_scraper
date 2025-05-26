@@ -16,10 +16,11 @@ The files should be in the same folder as this README file.
 Run `python inbox.py`. The command needs to be executed from the folder this README is in.
 
 ### Flags
-
-| `-v` | **Verbose**, more yapping                      |
-| `-s` | **Silent**, no output                          |
-| `-i` | **Ignore** list of already downloaded emails   |
+|**Flag**   |                 **Action**                    |
+|-----------|-----------------------------------------------|
+| `-v`      | **Verbose**, more yapping                     |
+| `-s`      | **Silent**, no output                         |
+| `-i`      | **Ignore** list of already downloaded emails  |
 
 ### Mailbox ID
 (Also, you might have to edit `inbox.py`. On line 35 or so, in the get_dump function, the url contains the string "SU5CT1g". It might be that that is not the mailbox ID you have.
