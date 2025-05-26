@@ -4,6 +4,4 @@
 __pycache__/*
 !*.py
 !README.md
-!poetry.lock
-!pyproject.toml
 !.gitignore

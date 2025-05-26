@@ -17,6 +17,8 @@ Run `python inbox.py`. The command needs to be executed from the folder this REA
 
 Running it with `-v` (`python inbox.py -v`) will enable verbose so a lot more yapping, up to you if you want that.
 
+Adding `-i` as flag ignores all previously downloaded files and also doesn't add to the `downloads.json`. Alternatively you can delete the downloads.json file, it won't break anything
+
 ## Configuration
 Little to nothing here, you can check out `lib.py` and see if you want to change any of the default state things.
 

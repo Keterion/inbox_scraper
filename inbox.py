@@ -48,7 +48,8 @@ if __name__ == "__main__":
     # a = [1, 2]
 
     # verbose logging when running with -v
-    vprint = print if len(sys.argv) >= 2 and sys.argv[1] == "-v" else lambda *a: None
+    vprint = print if len(sys.argv) >= 2 and "-v" in sys.argv else lambda *a: None
+    ignore_previous_downloads = "-i" in sys.argv
 
     if path.exists("downloaded.json"):
         with open("downloaded.json", "r") as f:
@@ -67,7 +68,7 @@ if __name__ == "__main__":
         try:
             emails = dump["items"]
             for mail in emails:
-                if mail["id"]["uid"] in downloaded:
+                if mail["id"]["uid"] in downloaded and not ignore_previous_downloads:
                     print(mail["subject"] + " already downloaded, skipping...")
                     state["total"] += 1
                     continue  # skips any email that has been downloaded
@@ -75,7 +76,7 @@ if __name__ == "__main__":
                     filename = (
                         convert_date(mail["date"])
                         + str(mail["id"]["uid"])
-                        + f":{mail['from'][0]['personal']}-{mail['subject']}".replace(
+                        + f":{mail['from'][0]['display']}-{mail['subject']}".replace(
                             "/", "_"
                         )
                         .replace("\n", "")
@@ -89,7 +90,6 @@ if __name__ == "__main__":
                     vprint("Got email response")
                     if len(contents) > 3:
                         # vprint("Filename: " + filename)
-                        lib.ensure_path(f'{state["save_dir"]}/{filename}/attachments')
                         contents = json.loads(contents)
                         attachments = contents["attachments"]
                         if len(attachments) > 0:
@@ -97,6 +97,9 @@ if __name__ == "__main__":
                                 "Found "
                                 + str(len(attachments))
                                 + " attachments, downloading..."
+                            )
+                            lib.ensure_path(
+                                path.join(state["save_dir"], filename, "attachments")
                             )
                         for attachment in attachments:
                             attachment_name = attachment["data"]["filename"]
@@ -108,7 +111,12 @@ if __name__ == "__main__":
                                 vprint("Downloading attachment data stream...")
                                 r.raise_for_status()
                                 with open(
-                                    f'{state["save_dir"]}/{filename}/attachments/{attachment_name}',
+                                    path.join(
+                                        state["save_dir"],
+                                        filename,
+                                        "attachments",
+                                        attachment_name,
+                                    ),
                                     "wb",
                                 ) as f:
                                     for chunk in r.iter_content(chunk_size=4096):
@@ -117,12 +125,16 @@ if __name__ == "__main__":
                         try:
                             text = contents["content"]["plain"][0]["content"]
                             lib.write_file(
-                                f'{state["save_dir"]}/{filename}/{filename}.txt', text
+                                path.join(
+                                    state["save_dir"], filename, filename + ".txt"
+                                ),
+                                text,
                             )
                         except:
                             vprint("Mail {mail['subject']} has no text")
                         state["total"] += 1
-                        downloaded.append(mail["id"]["uid"])
+                        if not ignore_previous_downloads:
+                            downloaded.append(mail["id"]["uid"])
                         print(f"Saved {mail['subject']}")
                     else:
                         print(f"Error getting {mail['subject']}")
