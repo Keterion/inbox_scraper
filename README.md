@@ -6,6 +6,8 @@
 [requests](https://pypi.org/project/requests/) = *
 
 ### Files
+You need to create these files before running the program.
+
 username.txt - iserv username (i.e. "john.doe")
 
 password.txt - iserv password (i.e. "passw0rd")
