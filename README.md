@@ -6,11 +6,11 @@
 [requests](https://pypi.org/project/requests/) = *
 
 ### Files
-You need to create these files before running the program.
+You need to write data into these two files:
 
-username.txt - iserv username (i.e. "john.doe")
+username(.txt) - iserv username (i.e. "john.doe")
 
-password.txt - iserv password (i.e. "passw0rd")
+password(.txt) - iserv password (i.e. "passw0rd")
 
 The files should be in the same folder as this README file.
 
