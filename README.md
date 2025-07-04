@@ -6,7 +6,7 @@
 [requests](https://pypi.org/project/requests/) = *
 
 ### Files
-You need to write data into these two files:
+You need to write information into these two files:
 
 username(.txt) - iserv username (i.e. "john.doe")
 
