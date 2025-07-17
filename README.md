@@ -26,7 +26,7 @@ Run `python inbox.py`. The command needs to be executed from the folder this REA
 | `--sent`  | Uses the mailbox ID for the sent emails       |
 
 ### Mailbox ID
-(Also, you might have to edit `inbox.py`. On line 35 or so, in the get_dump function, the url contains the string "SU5CT1g". It might be that that is not the mailbox ID you have.
+(Also, you might have to edit `lib.py`. In there you have the inboxID and outboxID. You need to change those.
 #### Getting your mailbox ID
 There are two ways I know of.
 
@@ -38,6 +38,6 @@ Click on that request, and somewhere you should see the GET request that was mad
 ## Configuration
 Little to nothing here, you can check out `lib.py` and see if you want to change any of the default state things.
 
-The two relevant things are *save_dir*, so the directory the mails are saved under, and *get_ammount*.
+The two relevant things are *inbox_directory* and *outbox_directory*, which is the directory the mails are saved under, and *get_ammount*.
 
 The higher *get_ammount* is, the worse it would be if the program were to fail because you'd loose stuff. Yeah.
