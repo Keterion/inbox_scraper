@@ -23,6 +23,7 @@ Run `python inbox.py`. The command needs to be executed from the folder this REA
 | `-v`      | **Verbose**, more yapping                     |
 | `-s`      | **Silent**, no output                         |
 | `-i`      | **Ignore** list of already downloaded emails  |
+| `--sent`  | Uses the mailbox ID for the sent emails       |
 
 ### Mailbox ID
 (Also, you might have to edit `inbox.py`. On line 35 or so, in the get_dump function, the url contains the string "SU5CT1g". It might be that that is not the mailbox ID you have.

@@ -29,10 +29,10 @@ def convert_date(date: str):
     ##return ret
 
 
-def get_dump(start: int, ammount: int, username: str, s: Session) -> dict:
+def get_dump(start: int, ammount: int, username: str, mailbox: str, s: Session) -> dict:
     return get_json(
         s,
-        f"https://fvbschulen.eu/iserv/mail/api/v2/account/{username}/message?mailbox[]=SU5CT1g&limit={ammount}&offset={start}&sort=date&order=desc",
+        f"https://fvbschulen.eu/iserv/mail/api/v2/account/{username}/message?mailbox[]={mailbox}&limit={ammount}&offset={start}&sort=date&order=desc",
     )
 
 
@@ -45,8 +45,6 @@ def get_email(url: str, s: Session) -> str:
 
 
 if __name__ == "__main__":
-    # a = [1, 2]
-
     # verbose logging when running with -v
     pprint = print if "-s" not in sys.argv else lambda *b: None
     vprint = pprint if len(sys.argv) >= 2 and "-v" in sys.argv else lambda *a: None
@@ -61,9 +59,16 @@ if __name__ == "__main__":
     s = lib.gen_session()
     state: dict = lib.gen_state()
 
+    mailboxID = state["inboxID"] if "--sent" not in sys.argv else state["outboxID"]
+    save_directory = (
+        state["inbox_directory"]
+        if "--sent" not in sys.argv
+        else state["outbox_directory"]
+    )
+
     emails_per_get = state["get_ammount"]
     start = 0
-    dump = get_dump(start, emails_per_get, state["username"], s)
+    dump = get_dump(start, emails_per_get, state["username"], mailboxID, s)
 
     while state["total"] < dump["total"]:
         try:
@@ -85,7 +90,7 @@ if __name__ == "__main__":
                     )
                     pprint("\nDownloading: " + mail["subject"])
                     contents = get_email(
-                        f'https://fvbschulen.eu/iserv/mail/api/v2/account/{state["username"]}/mailbox/SU5CT1g/message/{mail["id"]["uid"]}',
+                        f'https://fvbschulen.eu/iserv/mail/api/v2/account/{state["username"]}/mailbox/{mailboxID}/message/{mail["id"]["uid"]}',
                         s,
                     )
                     vprint("Got email response")
@@ -100,7 +105,7 @@ if __name__ == "__main__":
                                 + " attachments, downloading..."
                             )
                             lib.ensure_path(
-                                path.join(state["save_dir"], filename, "attachments")
+                                path.join(save_directory, filename, "attachments")
                             )
                         for attachment in attachments:
                             attachment_name = attachment["data"]["filename"]
@@ -113,7 +118,7 @@ if __name__ == "__main__":
                                 r.raise_for_status()
                                 with open(
                                     path.join(
-                                        state["save_dir"],
+                                        save_directory,
                                         filename,
                                         "attachments",
                                         attachment_name,
@@ -126,9 +131,7 @@ if __name__ == "__main__":
                         try:
                             text = contents["content"]["plain"][0]["content"]
                             lib.write_file(
-                                path.join(
-                                    state["save_dir"], filename, filename + ".txt"
-                                ),
+                                path.join(save_directory, filename, filename + ".txt"),
                                 text,
                             )
                         except:
@@ -143,7 +146,7 @@ if __name__ == "__main__":
                     pprint(e)
 
             start += emails_per_get
-            dump = get_dump(start, emails_per_get, state["username"], s)
+            dump = get_dump(start, emails_per_get, state["username"], mailboxID, s)
             lib.write_file("downloaded.json", json.dumps(downloaded))
         except KeyboardInterrupt:
             pprint("Exiting...")

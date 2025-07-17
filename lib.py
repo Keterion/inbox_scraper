@@ -24,7 +24,7 @@ def gen_session() -> requests.Session:
     s = requests.Session()
     url = "https://fvbschulen.eu/iserv/auth/login"
     # s.get(url)
-    s.post(url, data=gen_payload())
+    res = s.post(url, data=gen_payload())
     return s
 
 
@@ -32,7 +32,10 @@ def gen_state() -> dict:
     return {
         "get_ammount": 10,
         "total": 0,
-        "save_dir": "mails",
+        "inbox_directory": "inbox",
+        "outbox_directory": "sent",
+        "inboxID": "SU5CT1g",
+        "outboxID": "SU5CT1gvU2VudA",
         "username": read_file_line("username.txt") + "@fvbschulen.eu",
     }
 
